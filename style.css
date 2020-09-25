@@ -16,6 +16,15 @@
        url("./Inter-Medium.woff") format("woff");
 }
 
+@font-face {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style:  normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("./Inter-Black.woff2") format("woff2"),
+       url("./Inter-Black.woff") format("woff");
+}
+
 
 .page {
   box-sizing: border-box;
@@ -89,7 +98,7 @@
   line-height: 22px;
   color: #FFFFFF;
 }
-
+/* добавить ховеры добавить крестик */
 .profile__button {
   width: 24px;
   height: 24px;
@@ -109,4 +118,90 @@
   cursor: pointer;
   margin-left: auto;
 }
+
+.photo {
+  margin: 0 auto;
+  margin-top: 50px;
+  max-width: 882px;
+  padding: 0 185px 0; /* чек лист вопрос */
+}
+
+.photo__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* display: flex;
+  flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(282px, max-content));
+  grid-template-rows: repeat(2, minmax(min-content, max-content));
+  column-gap: 16px;
+  row-gap: 21px;
+  justify-content: center;
+}
+
+.photo__item {
+  max-width: 282px;
+  background-color: #fff;
+  border-radius: 10px;
+  /* margin-right: 16px;
+  margin-bottom: 21px; */
+}
+
+/* .photo__item:nth-child(3n){
+  margin-right: 0;
+} */
+
+.photo__item-container {
+
+}
+
+.photo__item-image {
+  max-width: 282px;
+}
+
+.photo__descr-info {
+  max-width: 246px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 25px 15px 31px 21px;
+}
+
+.photo__title {
+  margin: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.photo__button {
+  border: 0;
+  padding: 0;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.footer {
+  max-width: 318px;
+  padding: 66px 0 60px 199px;
+}
+
+.footer__text {
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #545454;
+  margin: 0;
+}
+
 
