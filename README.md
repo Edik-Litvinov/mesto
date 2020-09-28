@@ -27,5 +27,5 @@
 * Верстка формы
 * Работа с DOM
 
-Ссылка на работу [mesto](https://edik-litvinov.github.io/mesto/.)
+Ссылка на работу [mesto](https://edik-litvinov.github.io/mesto)
 
