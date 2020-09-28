@@ -23,7 +23,7 @@ function formSubmitHandler (evt) {
 
     // Находим поля формы в DOM
     let nameInput = document.querySelector('.popup__form-item_name').value;
-    let jobInput =  document.querySelector('.popup__form-item_job').value;
+    let jobInput = document.querySelector('.popup__form-item_job').value;
 
     // Получите значение полей из свойства value
 
