@@ -1,0 +1,11 @@
+.photo__item {
+  max-width: 282px;
+  background-color: #fff;
+  border-radius: 10px;
+  /* margin-right: 16px;
+  margin-bottom: 21px; */
+}
+
+/* .photo__item:nth-child(3n){
+  margin-right: 0;
+} */

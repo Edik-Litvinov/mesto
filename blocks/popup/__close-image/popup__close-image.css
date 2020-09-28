@@ -1,0 +1,19 @@
+.popup__close-image {
+  position: absolute;
+  top: -45px;
+  right: -50px;
+}
+
+.popup__close-image:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__close-image {
+    top: -30px;
+    right: 0;
+    width: 26px;
+    height: 26px;
+  }
+}

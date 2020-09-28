@@ -1,0 +1,19 @@
+.photo {
+  margin: 0 auto;
+  margin-top: 50px;
+  max-width: 882px;
+  padding: 0 185px 0; /* чек лист вопрос 30px */
+}
+
+@media screen and (max-width: 1270px) {
+  .photo {
+    padding: 0 80px 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .photo {
+    padding:0 19px 0;
+    margin-top: 36px;
+  }
+}

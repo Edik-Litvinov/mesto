@@ -1,0 +1,8 @@
+.photo__descr-info {
+  max-width: 246px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 25px 15px 31px 21px;
+}
