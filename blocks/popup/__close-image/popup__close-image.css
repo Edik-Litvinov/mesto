@@ -2,11 +2,17 @@
   position: absolute;
   top: -45px;
   right: -50px;
+  border: 0;
+  background: none;
 }
 
 .popup__close-image:hover {
   opacity: 0.6;
   cursor: pointer;
+}
+
+.popup__close-image:focus {
+  outline: none;
 }
 
 @media screen and (max-width: 768px) {
