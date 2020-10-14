@@ -1,0 +1,6 @@
+@media screen and (max-width: 768px) {
+  .popup__form-button_gallery {
+    margin-top: 36px;
+    padding: 12px 48px;
+  }
+}

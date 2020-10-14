@@ -1,0 +1,15 @@
+.popup__close-image_scale {
+  width: 40px;
+  height: 40px;
+  top: -35px;
+  right: -35px;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__close-image_scale {
+    width: 30px;
+    height: 30px;
+    top: -25px;
+    right: -25px;
+  }
+}

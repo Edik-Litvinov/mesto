@@ -1,0 +1,15 @@
+.popup__close-image_gallery{
+  width: 40px;
+  height: 40px;
+  top: -30px;
+  right: -30px;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__close-image_gallery {
+    top: -20px;
+    right: -20px;
+    width: 30px;
+    height: 30px;
+  }
+}

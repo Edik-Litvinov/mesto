@@ -1,0 +1,6 @@
+@media screen and (max-width: 768px) {
+  .popup__title_gallery {
+    padding: 30px 35px 0 20px;
+    margin-bottom: 36px;
+  }
+}
