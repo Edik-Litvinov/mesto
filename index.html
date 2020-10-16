@@ -41,8 +41,8 @@
           </button>
           <h2 class="popup__title">Редактировать профиль</h2>
           <form class="popup__form" name="form-text">
-            <input type="text" name="profile-title" class="popup__form-item popup__form-item_name" />
-            <input type="text" name="profile-subtitle" class="popup__form-item popup__form-item_job" />
+            <input type="text" required name="profile-title" class="popup__form-item popup__form-item_name" />
+            <input type="text" required name="profile-subtitle" class="popup__form-item popup__form-item_job" />
             <button class="popup__form-button" type="submit">Сохранить</button>
           </form>
         </div>
@@ -56,7 +56,7 @@
           <h2 class="popup__title popup__title_gallery">Новое место</h2>
           <form class="popup__form popup__form_gallery" name="form-text">
             <input type="text" placeholder="Название" name="profile-title" class="popup__form-item popup__form-item_title" />
-            <input type="text" placeholder="Ссылка на картинку" name="profile-subtitle" class="popup__form-item popup__form-item_image" />
+            <input type="url" placeholder="Ссылка на картинку" name="profile-subtitle" class="popup__form-item popup__form-item_image" />
             <button class="popup__form-button popup__form-button_gallery" type="submit">Создать</button>
           </form>
         </div>
@@ -79,8 +79,10 @@
 
     <template id="template-photo">
       <li class="photo__item">
-        <button class="photo__delete-button"></button>
-        <img class="photo__item-image" />
+        <button class="photo__delete-button">
+          <img src="./images/DeleteIcon.svg" alt="Картинка удаления">
+        </button>
+        <img class="photo__item-image">
         <div class="photo__descr-info">
           <h2 class="photo__title"></h2>
           <button type="button" class="photo__button"></button>
