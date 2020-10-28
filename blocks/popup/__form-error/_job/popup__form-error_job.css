@@ -1,0 +1,11 @@
+.popup__form-error_job {
+  top: 218px;
+  left: 36px;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__form-error_job {
+    top: 226px;
+    left: 22px;
+  }
+}

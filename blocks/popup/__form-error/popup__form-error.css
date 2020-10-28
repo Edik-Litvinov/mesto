@@ -1,0 +1,31 @@
+.popup__form-error {
+  color: #FF0000;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  margin-top: 5px;
+  max-width: 327px;
+  position: absolute;
+  top: 148px;
+  left: 36px;
+}
+
+/* .popup__form-error:last-of-type {
+  position: absolute;
+  top: 218px;
+  left:36px;
+} */
+
+/* @media screen and (max-width: 768px) {
+  .popup__form-error {
+    top: 153px;
+    left: 22px;
+  }
+  .popup__form-error:last-of-type {
+    top: 224px;
+    left: 22px;
+  }
+} */
+

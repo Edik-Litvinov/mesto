@@ -8,7 +8,7 @@
   color: #000000;
   border-bottom: 1px solid rgba(0, 0, 0, .2);
   padding: 0 0 13px;
-  margin-bottom: 30px;
+  margin-bottom: 43px;
 }
 
 .popup__form-item:last-of-type {
@@ -16,5 +16,7 @@
 }
 
 .popup__form-item:focus {
-  outline: 3px solid rgba(0, 0, 255, .5);
+  outline: 2px solid rgba(0, 0, 255, .5);
 }
+
+
