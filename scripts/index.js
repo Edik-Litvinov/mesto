@@ -65,7 +65,7 @@ function submitFormHandlerImage(evt) {
     name: inputTitle.value,
     link: inputImage.value,
   }, '#template-photo');
-  cardElement = newItem.generateCard();
+  const cardElement = newItem.generateCard();
   photoList.prepend(cardElement);
   formImage.reset();
   // inputTitle.value = "";
