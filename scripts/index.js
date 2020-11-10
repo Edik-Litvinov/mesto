@@ -1,5 +1,3 @@
-// console.log("Hello, World!");
-
 const popupProfile = document.querySelector(".popup");
 const buttonPopupClose = document.querySelector(".popup__close-image");
 const buttonOpenPopup = document.querySelector(".profile__button");
@@ -12,7 +10,7 @@ const profileText = document.querySelector(".profile__text");
 // Массив попапов
 const popups = Array.from(document.querySelectorAll('.popup'));
 //Template
-const templatePhoto = document.querySelector("#template-photo").content;
+// const templatePhoto = document.querySelector("#template-photo").content;
 
 // Форма Картинок
 const photoList = document.querySelector(".photo__list");
@@ -24,10 +22,12 @@ const inputImage = document.querySelector(".popup__form-item_image");
 // let photoTitle = document.querySelector(".photo__title");
 // let photoItemImage = document.querySelector(".photo__item-image");
 // Попап картинок
-const popupPhotoScale = document.querySelector(".popup_photo-scale");
 const popupGalleryClose = document.querySelector(".popup__close-image_gallery");
-// let popupImageScale = document.querySelector('.popup__image-scale');
-const closeScale = document.querySelector(".popup__close-image_scale");
+
+export const popupImageScale = document.querySelector('.popup__image-scale');
+export const closeScale = document.querySelector(".popup__close-image_scale");
+export const popupPhotoScale = document.querySelector(".popup_photo-scale");
+
 
 const initialCards = [
   {
@@ -56,64 +56,22 @@ const initialCards = [
   },
 ];
 
-const renderCards = () => {
-  const cards = initialCards.map((element) => {
-    return getCard(element);
-  });
-
-  photoList.append(...cards);
-};
-
-
-// Получаем карточку
-const getCard = (items) => {
-  const card = templatePhoto.cloneNode(true);
-  const photoItemImage =  card.querySelector(".photo__item-image");
-  const photoTitle = card.querySelector(".photo__title");
-  // console.log(card);
-  photoTitle.textContent = items.name;
-  photoItemImage.src = items.link;
-  photoItemImage.alt = items.name;
-  photoItemImage.addEventListener("click", () => {
-    openPopup(popupPhotoScale);
-    popupPhotoScale.querySelector(".popup__image-scale").src = items.link;
-    popupPhotoScale.querySelector(".popup__text").textContent = items.name;
-  });
-  card.querySelector(".photo__delete-button").addEventListener("click", handlerRemove);
-  card.querySelector(".photo__button").addEventListener("click", (evt) => {
-    const evtTarget = evt.target;
-    evtTarget.classList.toggle("photo__button_active");
-    // console.log(evtTarget)
-  });
-
-  return card;
-};
+import { Card } from './Card.js';
+import { FormValidator } from './validate.js';
 
 function submitFormHandlerImage(evt) {
   evt.preventDefault();
-  const newItem = getCard({
+  const newItem = new Card({
     name: inputTitle.value,
     link: inputImage.value,
-  });
-  photoList.prepend(newItem);
-  inputTitle.value = "";
-  inputImage.value = "";
+  }, '#template-photo');
+  cardElement = newItem.generateCard();
+  photoList.prepend(cardElement);
+  formImage.reset();
+  // inputTitle.value = "";
+  // inputImage.value = "";
   closePopup(popupGallery);
 }
-
-const handlerRemove = (evt) => {
-  evt.target.closest(".photo__item").remove();
-};
-
-
-// function popupToggle() {
-  // if (popupProfile.classList.contains("popup_opened") !== true) {
-  //   nameInput.value = profileTitle.textContent;
-  //   jobInput.value = profileText.textContent;
-  // }
-//   popupProfile.classList.toggle("popup_opened");
-// }
-
 
 function savePopup() {
     nameInput.value = profileTitle.textContent;
@@ -121,42 +79,62 @@ function savePopup() {
     openPopup(popupProfile);
 };
 
+function hideError(formElem) {
+  const errorElement = formElem.querySelectorAll('.popup__form-error');
+  errorElement.forEach(item => {
+    item.textContent = '';
+  });
+  const InputArr = formElem.querySelectorAll('.popup__form-item');
+  InputArr.forEach(input => {
+    input.classList.remove('popup__form-item_state');
+    input.value = '';
+  });
+}
+
 function openPopup(popup) {
   popup.classList.add("popup_opened");
 };
 
 function closePopup(popup) {
   popup.classList.remove("popup_opened");
+  hideError(popup)
 };
 
-// document.addEventListener('keydown', (evt) => {
-//   const classPopupOpened = document.querySelector(".popup_opened")
-//   if (evt.key === 'Escape') {
-//     closePopup(classPopupOpened)
-//   }
-// });
-// Находим форму в DOM
-// Обработчик «отправки» формы, хотя пока
-// она никуда отправляться не будет
 function submitFormHandler(evt) {
   evt.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
-  // Так мы можем определить свою логику отправки.
-  // О том, как это делать, расскажем позже.
 
-  // Находим поля формы в DOM
-
-  // Получите значение полей из свойства value
-
-  // Выберите элементы, куда должны быть вставлены значения полей
-
-  // Вставьте новые значения с помощью textContent
   profileTitle.textContent = nameInput.value;
   profileText.textContent = jobInput.value;
   closePopup(popupProfile);
 }
 
-// Закрытие по фону
-function clickBackgroundClose() {
+// рендер карточек
+initialCards.forEach((item) => {
+  const card = new Card(item, '#template-photo');
+  const cardElement = card.generateCard();
+  photoList.append(cardElement);
+});
+
+
+const formValidation = new FormValidator({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__form-item',
+  submitButtonSelector: '.popup__form-button',
+  inactiveButtonClass: 'popup__form-button_disabled',
+  inputErrorClass: 'error',
+  errorClass: 'popup__form-item_state'
+});
+
+formValidation.enableValidation();
+
+buttonOpenPopup.addEventListener("click", () => savePopup(popupProfile));
+buttonPopupClose.addEventListener("click", () => closePopup(popupProfile));
+formElement.addEventListener("submit", submitFormHandler);
+buttonAddImage.addEventListener("click", () => openPopup(popupGallery));
+popupGalleryClose.addEventListener("click", () => closePopup(popupGallery));
+formImage.addEventListener("submit", submitFormHandlerImage);
+
+document.addEventListener('click', () => {
   popups.forEach((popupElement) => {
     popupElement.addEventListener('click', (evt) => {
       if (evt.target === evt.currentTarget) {
@@ -164,46 +142,7 @@ function clickBackgroundClose() {
       }
     });
   });
-}
-
-
-// document.addEventListener('click', function clickBackgroundClose(evt) {
-//   if(evt.target.classList.contains("popup")) {
-//     closePopup(popupProfile)
-//   }
-// })
-
-
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-buttonOpenPopup.addEventListener("click", () => savePopup(popupProfile));
-buttonPopupClose.addEventListener("click", () => closePopup(popupProfile));
-formElement.addEventListener("submit", submitFormHandler);
-
-buttonAddImage.addEventListener("click", () => openPopup(popupGallery));
-popupGalleryClose.addEventListener("click", () => closePopup(popupGallery));
-
-formImage.addEventListener("submit", submitFormHandlerImage);
-
-closeScale.addEventListener("click", () => closePopup(popupPhotoScale));
-
-// закрытие по фону
-// document.addEventListener('click', (evt) => {
-//   closePopup(evt.target)
-// });
-
-// document.addEventListener('click', () => {
-//   popups.forEach((popupElement) => {
-//     popupElement.addEventListener('click', (evt) => {
-//       if (evt.target === evt.currentTarget) {
-//         closePopup(popupElement)
-//       }
-//     });
-//   });
-// });
-
-// закрытие по фону
-clickBackgroundClose();
+});
 
 // закрытие по Esc
 document.addEventListener('keydown', (evt) => {
@@ -214,5 +153,3 @@ document.addEventListener('keydown', (evt) => {
   });
 });
 
-
-renderCards();
