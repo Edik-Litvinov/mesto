@@ -23,6 +23,7 @@ const inputImage = document.querySelector(".popup__form-item_image");
 // let photoItemImage = document.querySelector(".photo__item-image");
 // Попап картинок
 const popupGalleryClose = document.querySelector(".popup__close-image_gallery");
+const buttonArr = document.querySelectorAll('.popup__form-button')
 
 export const popupImageScale = document.querySelector('.popup__image-scale');
 export const closeScale = document.querySelector(".popup__close-image_scale");
@@ -91,13 +92,22 @@ function hideError(formElem) {
   });
 }
 
+
+function toggleButtonState() {
+  buttonArr.forEach(item => {
+      item.classList.add('popup__form-button_disabled');
+      item.disabled = true;
+    })
+}
+
 function openPopup(popup) {
   popup.classList.add("popup_opened");
+  toggleButtonState();
 };
 
 function closePopup(popup) {
   popup.classList.remove("popup_opened");
-  hideError(popup)
+  hideError(popup);
 };
 
 function submitFormHandler(evt) {
