@@ -1,3 +1,7 @@
+import { Card } from './Card.js';
+import { FormValidator } from './validate.js';
+import { initialCards } from './dataArr.js';
+
 const popupProfile = document.querySelector(".popup");
 const buttonPopupClose = document.querySelector(".popup__close-image");
 const buttonOpenPopup = document.querySelector(".profile__button");
@@ -19,8 +23,7 @@ const popupGallery = document.querySelector(".popup_gallery");
 const formImage = document.querySelector(".popup__form_gallery");
 const inputTitle = document.querySelector(".popup__form-item_title");
 const inputImage = document.querySelector(".popup__form-item_image");
-// let photoTitle = document.querySelector(".photo__title");
-// let photoItemImage = document.querySelector(".photo__item-image");
+
 // Попап картинок
 const popupGalleryClose = document.querySelector(".popup__close-image_gallery");
 const buttonArr = document.querySelectorAll('.popup__form-button')
@@ -28,37 +31,6 @@ const buttonArr = document.querySelectorAll('.popup__form-button')
 export const popupImageScale = document.querySelector('.popup__image-scale');
 export const closeScale = document.querySelector(".popup__close-image_scale");
 export const popupPhotoScale = document.querySelector(".popup_photo-scale");
-
-
-const initialCards = [
-  {
-    name: "Архыз",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-  },
-  {
-    name: "Челябинская область",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link: "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
-
-import { Card } from './Card.js';
-import { FormValidator } from './validate.js';
 
 function submitFormHandlerImage(evt) {
   evt.preventDefault();
@@ -80,34 +52,28 @@ function savePopup() {
     openPopup(popupProfile);
 };
 
-function hideError(formElem) {
-  const errorElement = formElem.querySelectorAll('.popup__form-error');
-  errorElement.forEach(item => {
-    item.textContent = '';
+// закрытие по Esc
+function closeEsc (evt) {
+  const key = evt.key;
+  popups.forEach((pop) => {
+    if (key === 'Escape') {
+      pop.classList.remove('popup_opened')
+      document.removeEventListener('keydown', closeEsc);
+    }
   });
-  const InputArr = formElem.querySelectorAll('.popup__form-item');
-  InputArr.forEach(input => {
-    input.classList.remove('popup__form-item_state');
-    input.value = '';
-  });
-}
-
-
-function toggleButtonState() {
-  buttonArr.forEach(item => {
-      item.classList.add('popup__form-button_disabled');
-      item.disabled = true;
-    })
 }
 
 function openPopup(popup) {
-  popup.classList.add("popup_opened");
-  toggleButtonState();
+  popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closeEsc);
+  formValidationProfile.disabledButton();
+  formValidationGallery.disabledButton();
+  formValidationProfile.deleteError();
+  formValidationGallery.deleteError();
 };
 
 function closePopup(popup) {
-  popup.classList.remove("popup_opened");
-  hideError(popup);
+  popup.classList.remove('popup_opened');
 };
 
 function submitFormHandler(evt) {
@@ -125,17 +91,25 @@ initialCards.forEach((item) => {
   photoList.append(cardElement);
 });
 
-
-const formValidation = new FormValidator({
-  formSelector: '.popup__form',
+const formValidationProfile = new FormValidator({
   inputSelector: '.popup__form-item',
   submitButtonSelector: '.popup__form-button',
   inactiveButtonClass: 'popup__form-button_disabled',
   inputErrorClass: 'error',
   errorClass: 'popup__form-item_state'
-});
+}, '.popup__form');
 
-formValidation.enableValidation();
+const formValidationGallery = new FormValidator({
+  inputSelector: '.popup__form-item',
+  submitButtonSelector: '.popup__form-button',
+  inactiveButtonClass: 'popup__form-button_disabled',
+  inputErrorClass: 'error',
+  errorClass: 'popup__form-item_state'
+}, '.popup__form_gallery');
+
+formValidationGallery.enableValidation();
+formValidationProfile.enableValidation();
+
 
 buttonOpenPopup.addEventListener("click", () => savePopup(popupProfile));
 buttonPopupClose.addEventListener("click", () => closePopup(popupProfile));
@@ -143,6 +117,7 @@ formElement.addEventListener("submit", submitFormHandler);
 buttonAddImage.addEventListener("click", () => openPopup(popupGallery));
 popupGalleryClose.addEventListener("click", () => closePopup(popupGallery));
 formImage.addEventListener("submit", submitFormHandlerImage);
+closeScale.addEventListener('click', () => { closePopup(popupPhotoScale) });
 
 document.addEventListener('click', () => {
   popups.forEach((popupElement) => {
@@ -155,11 +130,11 @@ document.addEventListener('click', () => {
 });
 
 // закрытие по Esc
-document.addEventListener('keydown', (evt) => {
-  popups.forEach((pop) => {
-    if (evt.key === 'Escape') {
-      closePopup(pop);
-    }
-  });
-});
+// document.addEventListener('keydown', (evt) => {
+//   popups.forEach((pop) => {
+//     if (evt.key === 'Escape') {
+//       closePopup(pop);
+//     }
+//   });
+// });
 

@@ -1,4 +1,4 @@
-import { popupImageScale, closeScale, popupPhotoScale } from './index.js'
+import { popupImageScale, popupPhotoScale } from './index.js'
 
 export class Card {
   constructor(data, cardSel) {
@@ -15,11 +15,12 @@ export class Card {
 
     generateCard() {
       this._element = this._getTemplate();
+      const cardImg = this._element.querySelector('.photo__item-image')
       this._setEventListener();
 
       this._element.querySelector('.photo__title').textContent = this._name;
-      this._element.querySelector('.photo__item-image').src = this._link;
-      this._element.querySelector('.photo__item-image').alt = this._name;
+      cardImg.src = this._link;
+      cardImg.alt = this._name;
 
       return this._element
     }
@@ -28,7 +29,6 @@ export class Card {
       this._element.querySelector('.photo__delete-button').addEventListener('click',  (evt) => { this._handlerCardRemove(evt) });
       this._element.querySelector('.photo__item').addEventListener('click', (evt) =>  { this._handlerLike(evt) });
       this._element.querySelector('.photo__item-image').addEventListener('click', () => { this._openPopup(popupPhotoScale) });
-      closeScale.addEventListener('click', () => { this._closePopup(popupPhotoScale) });
     }
 
     _handlerCardRemove(evt) {
@@ -41,12 +41,17 @@ export class Card {
       }
     }
 
-    _openPopup(popup) {
-      popupImageScale.src = this._link;
-      popup.classList.add('popup_opened');
-    };
+    _closeEsc (evt) {
+      const key = evt.key;
+        if (key === 'Escape') {
+          popupPhotoScale.classList.remove('popup_opened');
+          document.removeEventListener('keydown', this._closeEsc);
+      }
+    }
 
-    _closePopup(popup) {
-      popup.classList.remove('popup_opened');
+    _openPopup() {
+      popupImageScale.src = this._link;
+      popupPhotoScale.classList.add('popup_opened');
+      document.addEventListener('keydown', this._closeEsc);
     };
 }

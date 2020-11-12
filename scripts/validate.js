@@ -1,11 +1,11 @@
 export class FormValidator {
-  constructor(settings) {
-    this._formSelector = settings.formSelector;
+  constructor(settings, formForValidation) {
     this._inputSelector = settings.inputSelector;
     this._submitButtonSelector = settings.submitButtonSelector;
     this._inactiveButtonClass = settings.inactiveButtonClass;
     this._inputErrorClass = settings.inputErrorClass;
     this._errorClass = settings.errorClass;
+    this._formSelector = formForValidation;
   }
 
   _showError(formElem, input) {
@@ -30,7 +30,32 @@ export class FormValidator {
     }
   }
 
-  _toggleButtonState(formElem,buttonElement) {
+  disabledButton() {
+    const formDis = document.querySelector(this._formSelector);
+    const buttonDis = formDis.querySelector(this._submitButtonSelector);
+    if (formDis.checkValidity()) {
+      buttonDis.classList.remove(this._inactiveButtonClass);
+      buttonDis.disabled = false;
+    } else {
+      buttonDis.classList.add(this._inactiveButtonClass);
+      buttonDis.disabled = true;
+    }
+  }
+
+  deleteError() {
+    const form = document.querySelector(this._formSelector)
+    const InputArr = form.querySelectorAll(this._inputSelector);
+    InputArr.forEach(input => {
+      input.classList.remove(this._errorClass);
+      const error = form.querySelector(`#${input.id}-${this._inputErrorClass}`);
+      error.textContent = '';
+    });
+    if (this._formSelector === '.popup__form_gallery') {
+      form.reset();
+    }
+  }
+
+  _toggleButtonState(formElem, buttonElement) {
     // console.log(inactiveButtonClass)
     if (formElem.checkValidity()) {
       buttonElement.classList.remove(this._inactiveButtonClass);
@@ -42,7 +67,7 @@ export class FormValidator {
   }
 
   _setEvenListeners(formElem) {
-    const inputElements = Array.from(formElem.querySelectorAll(this._inputSelector));
+    const inputElements = formElem.querySelectorAll(this._inputSelector);
     const buttonElement = formElem.querySelector(this._submitButtonSelector);
     // console.log(inputSelector)
     // console.log(submitButtonSelector);
@@ -57,13 +82,11 @@ export class FormValidator {
   }
 
   enableValidation() {
-    const formsElements = Array.from(document.querySelectorAll(this._formSelector));
+    const formElement = document.querySelector(this._formSelector);
     // console.log(formSelector)
-    formsElements.forEach(form => {
-      form.addEventListener('sumbit', (evt) => {
+    formElement.addEventListener('sumbit', (evt) => {
         evt.preventDefault();
       });
-      this._setEvenListeners(form);
-    });
+      this._setEvenListeners(formElement);
   }
 }
