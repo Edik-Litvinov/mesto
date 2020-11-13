@@ -33,13 +33,7 @@ export class FormValidator {
   disabledButton() {
     const formDis = document.querySelector(this._formSelector);
     const buttonDis = formDis.querySelector(this._submitButtonSelector);
-    if (formDis.checkValidity()) {
-      buttonDis.classList.remove(this._inactiveButtonClass);
-      buttonDis.disabled = false;
-    } else {
-      buttonDis.classList.add(this._inactiveButtonClass);
-      buttonDis.disabled = true;
-    }
+    this._toggleButtonState(formDis, buttonDis);
   }
 
   deleteError() {

@@ -54,26 +54,21 @@ function savePopup() {
 
 // закрытие по Esc
 function closeEsc (evt) {
+  const popupEsc = document.querySelector('.popup_opened');
   const key = evt.key;
-  popups.forEach((pop) => {
     if (key === 'Escape') {
-      pop.classList.remove('popup_opened')
-      document.removeEventListener('keydown', closeEsc);
+      closePopup(popupEsc);
     }
-  });
 }
 
-function openPopup(popup) {
+export function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', closeEsc);
-  formValidationProfile.disabledButton();
-  formValidationGallery.disabledButton();
-  formValidationProfile.deleteError();
-  formValidationGallery.deleteError();
 };
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeEsc);
 };
 
 function submitFormHandler(evt) {
@@ -91,30 +86,35 @@ initialCards.forEach((item) => {
   photoList.append(cardElement);
 });
 
-const formValidationProfile = new FormValidator({
+const settings = {
   inputSelector: '.popup__form-item',
   submitButtonSelector: '.popup__form-button',
   inactiveButtonClass: 'popup__form-button_disabled',
   inputErrorClass: 'error',
   errorClass: 'popup__form-item_state'
-}, '.popup__form');
+}
 
-const formValidationGallery = new FormValidator({
-  inputSelector: '.popup__form-item',
-  submitButtonSelector: '.popup__form-button',
-  inactiveButtonClass: 'popup__form-button_disabled',
-  inputErrorClass: 'error',
-  errorClass: 'popup__form-item_state'
-}, '.popup__form_gallery');
+const formValidationProfile = new FormValidator(settings, '.popup__form');
+const formValidationGallery = new FormValidator(settings, '.popup__form_gallery');
 
 formValidationGallery.enableValidation();
 formValidationProfile.enableValidation();
 
+buttonOpenPopup.addEventListener("click", () => {
+  savePopup(popupProfile);
+  formValidationProfile.disabledButton();
+  formValidationProfile.deleteError();
+});
 
-buttonOpenPopup.addEventListener("click", () => savePopup(popupProfile));
 buttonPopupClose.addEventListener("click", () => closePopup(popupProfile));
 formElement.addEventListener("submit", submitFormHandler);
-buttonAddImage.addEventListener("click", () => openPopup(popupGallery));
+
+buttonAddImage.addEventListener("click", () => {
+  formValidationGallery.disabledButton();
+  formValidationGallery.deleteError();
+  openPopup(popupGallery);
+});
+
 popupGalleryClose.addEventListener("click", () => closePopup(popupGallery));
 formImage.addEventListener("submit", submitFormHandlerImage);
 closeScale.addEventListener('click', () => { closePopup(popupPhotoScale) });

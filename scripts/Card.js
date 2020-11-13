@@ -1,4 +1,5 @@
-import { popupImageScale, popupPhotoScale } from './index.js'
+import { popupImageScale, popupPhotoScale } from './index.js';
+import { openPopup } from './index.js';
 
 export class Card {
   constructor(data, cardSel) {
@@ -28,7 +29,7 @@ export class Card {
     _setEventListener() {
       this._element.querySelector('.photo__delete-button').addEventListener('click',  (evt) => { this._handlerCardRemove(evt) });
       this._element.querySelector('.photo__item').addEventListener('click', (evt) =>  { this._handlerLike(evt) });
-      this._element.querySelector('.photo__item-image').addEventListener('click', () => { this._openPopup(popupPhotoScale) });
+      this._element.querySelector('.photo__item-image').addEventListener('click', () => { this._onClickImg() });
     }
 
     _handlerCardRemove(evt) {
@@ -41,17 +42,8 @@ export class Card {
       }
     }
 
-    _closeEsc (evt) {
-      const key = evt.key;
-        if (key === 'Escape') {
-          popupPhotoScale.classList.remove('popup_opened');
-          document.removeEventListener('keydown', this._closeEsc);
-      }
-    }
-
-    _openPopup() {
+    _onClickImg() {
       popupImageScale.src = this._link;
-      popupPhotoScale.classList.add('popup_opened');
-      document.addEventListener('keydown', this._closeEsc);
+      openPopup(popupPhotoScale);
     };
 }
