@@ -1,6 +1,6 @@
 import Card from "../components/Card.js";
 import FormValidator from "../components/validate.js";
-import { initialCards, popupProfile, buttonOpenPopup, nameInput, jobInput, photoList, buttonAddImage, popupGallery, formImage, popupPhotoScale, settings } from "../utils/constants.js";
+import { initialCards, formElement, popupProfile, buttonOpenPopup, nameInput, jobInput, photoList, buttonAddImage, popupGallery, formImage, popupPhotoScale, settings } from "../utils/constants.js";
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
@@ -60,8 +60,8 @@ const profileEdit = new PopupWithForm(popupProfile, {
   },
 });
 
-const formValidationProfile = new FormValidator(settings, ".popup__form");
-const formValidationGallery = new FormValidator(settings, ".popup__form_gallery");
+const formValidationProfile = new FormValidator(settings, formElement);
+const formValidationGallery = new FormValidator(settings, formImage);
 
 function openProfileEdit() {
   const userGetInfo = aboutUser.getUserInfo();

@@ -1,8 +1,8 @@
 export default class Section {
-  constructor({ items, renderer }, contSelector) {
+  constructor({ items, renderer }, elementContainer) {
     this._initialItems  = items;
     this.renderer = renderer;
-    this._contSelector = contSelector;
+    this._elementContainer = elementContainer;
   }
 
   renderItem() {
@@ -11,10 +11,10 @@ export default class Section {
     });
   }
 
-  addItem(element, isTrue) {
-    const prepend = isTrue
-    ? this._contSelector.prepend(element)
-    : this._contSelector.append(element)
+  addItem(element, isPrepend) {
+    isPrepend
+    ? this._elementContainer.prepend(element)
+    : this._elementContainer.append(element)
   }
 
 }
