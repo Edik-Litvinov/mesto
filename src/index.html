@@ -15,11 +15,16 @@
 
       <main class="content">
         <section class="profile">
-          <img class="profile__avatar" src="<%=require('./images/profile__image.jpg')%>" alt="Аватар" />
+
+          <div class="profile__wrapper-avatar">
+            <img class="profile__avatar" alt="Аватар" />
+            <button class="profile__button-avatar"></button>
+          </div>
+
           <div class="profile__info">
             <div class="profile__wrapper">
-              <h1 class="profile__title">Жак-Ив Кусто</h1>
-              <p class="profile__text">Исследователь океана</p>
+              <h1 class="profile__title"></h1>
+              <p class="profile__text"></p>
             </div>
             <button type="button" class="profile__button">
               <img src="<%=require('./images/profile__button.svg')%>" alt="картинка кнопки" />
@@ -80,6 +85,33 @@
         </div>
       </section>
 
+      <section class="popup popup_delete">
+        <div class="popup__container popup__container_delete">
+          <button type="button" class="popup__close-image popup__close-image_delete">
+            <img class="popup__image" src="<%=require('./images/Close__popup.svg')%>" alt="Иконка закрытия" />
+          </button>
+          <h2 class="popup__title popup__title_delete">Вы уверены?</h2>
+          <form>
+            <button class="popup__form-button popup__form-button_delete" type="submit">Да</button>
+          </form>
+        </div>
+      </section>
+
+
+      <section class="popup popup_avatar">
+        <div class="popup__container popup__container_avatar">
+          <button type="button" class="popup__close-image popup__close-image_avatar">
+            <img class="popup__image" src="<%=require('./images/Close__popup.svg')%>" alt="Иконка закрытия" />
+          </button>
+          <h2 class="popup__title popup__title_avatar">Обновить аватар</h2>
+          <form class="popup__form popup__form_avatar" name="form-avatar" novalidate>
+            <input type="url" required placeholder="Ссылка на картинку" name="avatar" id="avatar" class="popup__form-item popup__form-item_avatar"/>
+            <span class="popup__form-error popup__form-error_avatar" id="avatar-error"></span>
+            <button class="popup__form-button popup__form-button_avatar" type="submit">Сохранить</button>
+          </form>
+        </div>
+      </section>
+
       <footer class="footer">
         <p class="footer__text">&copy; 2020 Mesto Russia</p>
       </footer>
@@ -93,7 +125,10 @@
         <img class="photo__item-image">
         <div class="photo__descr-info">
           <h2 class="photo__title"></h2>
-          <button type="button" class="photo__button"></button>
+          <div class="photo__wrapper">
+            <button type="button" class="photo__button"></button>
+            <p class="photo__number-like"></p>
+          </div>
         </div>
       </li>
     </template>

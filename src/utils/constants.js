@@ -33,6 +33,8 @@ export const nameInput = document.querySelector(".popup__form-item_name");
 export const jobInput = document.querySelector(".popup__form-item_job");
 export const profileTitle = document.querySelector(".profile__title");
 export const profileText = document.querySelector(".profile__text");
+export const avatar = document.querySelector('.profile__avatar');
+export const popupDelete = document.querySelector('.popup_delete');
 
 // Массив попапов
 const popups = Array.from(document.querySelectorAll('.popup'));
@@ -46,6 +48,9 @@ export const popupGallery = document.querySelector(".popup_gallery");
 export const formImage = document.querySelector(".popup__form_gallery");
 export const inputTitle = document.querySelector(".popup__form-item_title");
 export const inputImage = document.querySelector(".popup__form-item_image");
+export const popupAvatar = document.querySelector(".popup_avatar");
+export const formAvatar = document.querySelector('.popup__form_avatar');
+export const formAvatarButton = document.querySelector('.profile__button-avatar')
 
 // Попап картинок
 export const popupGalleryClose = document.querySelector(".popup__close-image_gallery");

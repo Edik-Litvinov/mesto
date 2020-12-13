@@ -1,0 +1,9 @@
+.popup__form-button_avatar {
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__form-button_avatar {
+    padding: 14px 82px;
+  }
+}

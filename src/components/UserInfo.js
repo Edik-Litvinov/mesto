@@ -11,9 +11,9 @@ export default class UserInfo {
     return objectUserInfo
   }
 
-  setUserInfo(formData) {
-    this._elementName.textContent = formData['profile-title'];
-    this._elementInfo.textContent = formData['profile-subtitle'];
+  setUserInfo(res) {
+    this._elementName.textContent = res.name;
+    this._elementInfo.textContent = res.about;
   }
 
 }
