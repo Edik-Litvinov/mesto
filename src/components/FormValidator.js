@@ -40,15 +40,12 @@ export default class FormValidator {
 
   deleteError() {
     // const form = document.querySelector(this._formSelector)
-    const InputArr = this._formElement.querySelectorAll(this._inputSelector);
-    InputArr.forEach(input => {
+    const inputArr = this._formElement.querySelectorAll(this._inputSelector);
+    inputArr.forEach(input => {
       input.classList.remove(this._errorClass);
       const error = this._formElement.querySelector(`#${input.id}-${this._inputErrorClass}`);
       error.textContent = '';
     });
-    if (this._formElement === '.popup__form_gallery') {
-      this._formElement.reset();
-    }
   }
 
   _toggleButtonState(formElem, buttonElement) {

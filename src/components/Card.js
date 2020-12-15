@@ -1,5 +1,5 @@
 export default class Card {
-  constructor( { name, link, likes, owner, _id, handleCardClick,
+  constructor({ name, link, likes, owner, _id, handleCardClick,
     handleDeleteIconClick, handleLikeClick }, cardSel, dataUser) {
     this._name = name;
     this._link = link;
@@ -13,10 +13,11 @@ export default class Card {
     this.handleLikeClick = handleLikeClick;
     this._buttonLike = null;
     this._photoNumberLike = null;
+    this._photoDeleteButton = null;
     this._isLiked = this._likes.some(like => { return this._dataUser._id === like._id });
   }
     _getTemplate() {
-    const cardEmelment = document.querySelector(this._cardSelector)
+    const cardEmelment = this._cardSelector
     .content
     .querySelector('.photo__item')
     .cloneNode(true);
@@ -26,9 +27,10 @@ export default class Card {
     generateCard() {
       this._element = this._getTemplate();
       const cardImg = this._element.querySelector('.photo__item-image');
+      this._photoDeleteButton = this._element.querySelector('.photo__delete-button');
       this._setEventListener();
       if (this._owner  !== this._dataUser._id) {
-        this._element.querySelector('.photo__delete-button').remove();
+        this._photoDeleteButton.remove();
       }
 
       this._buttonLike = this._element.querySelector('.photo__button');
@@ -52,7 +54,7 @@ export default class Card {
     }
 
     _setEventListener() {
-      this._element.querySelector('.photo__delete-button').addEventListener('click',  () => { this.handleDeleteIconClick() });
+      this._photoDeleteButton.addEventListener('click',  () => { this.handleDeleteIconClick() });
       this._element.querySelector('.photo__button').addEventListener('click', () =>  { this.handleLikeClick() });
       this._element.querySelector('.photo__item-image').addEventListener('click', () => { this.handleCardClick() });
     }

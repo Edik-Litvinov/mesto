@@ -50,7 +50,7 @@ export const inputTitle = document.querySelector(".popup__form-item_title");
 export const inputImage = document.querySelector(".popup__form-item_image");
 export const popupAvatar = document.querySelector(".popup_avatar");
 export const formAvatar = document.querySelector('.popup__form_avatar');
-export const formAvatarButton = document.querySelector('.profile__button-avatar')
+export const formAvatarButton = document.querySelector('.profile__button-avatar');
 
 // Попап картинок
 export const popupGalleryClose = document.querySelector(".popup__close-image_gallery");
@@ -67,3 +67,5 @@ export const settings = {
   inputErrorClass: 'error',
   errorClass: 'popup__form-item_state'
 }
+
+export const templateElement = document.querySelector('#template-photo');

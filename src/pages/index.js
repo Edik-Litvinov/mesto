@@ -1,8 +1,8 @@
 import Card from "../components/Card.js";
-import FormValidator from "../components/validate.js";
+import FormValidator from "../components/FormValidator.js";
 import {
   formElement, popupProfile, buttonOpenPopup, nameInput, jobInput, photoList, buttonAddImage, popupGallery, formImage, popupPhotoScale, settings,
-  profileTitle, profileText, avatar, popupDelete, popupAvatar, formAvatar, formAvatarButton
+  profileTitle, profileText, avatar, popupDelete, popupAvatar, formAvatar, formAvatarButton, templateElement
 
 } from "../utils/constants.js";
 import Section from "../components/Section.js";
@@ -12,27 +12,47 @@ import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
 import '../pages/index.css';
 import PopupWithSubmit from "../components/PopupWithSubmit.js";
+import renderLoading from "../utils/utils.js";
 
+
+function createCard({ name, link, likes, owner, _id }, templateElement, dataUser) {
+  const card = new Card(
+    {
+      name, link, likes, owner, _id,
+
+      handleCardClick: () => { newPopupWithImg.open({ name, link }) },
+      handleDeleteIconClick: () => {
+        const popupConfirmDelete = new PopupWithSubmit(popupDelete, () => {
+          renderLoading(popupDelete, true)
+        api.deleteCard(_id)
+         .then((res) => {
+          card.handlerCardRemove();
+          popupConfirmDelete.close();
+        }).finally((res) => {
+          renderLoading(popupDelete, false);
+        })
+      });
+        popupConfirmDelete.setEventListeners();
+        popupConfirmDelete.open();
+      },
+      handleLikeClick: () => {
+        card.likeStatus()
+        ? api.deleteLiki(_id)
+            .then((res) => {
+             card.handlerLike(res)
+          })
+        : api.putLike(_id)
+            .then((res) => {
+              card.handlerLike(res)
+            })
+          }
+    }, templateElement, dataUser,
+  );
+  const cardElement = card.generateCard();
+  return cardElement
+}
 
 const cardList = new Section(
-  {
-    items: [],
-    renderer: ({ name, link }) => {
-      const card = new Card(
-        {
-          name,
-          link,
-          handleCardClick: () => {
-            newPopupWithImg.open({ name, link });
-          },
-        },
-        "#template-photo"
-      );
-      const cardElement = card.generateCard();
-      cardList.addItem(cardElement);
-      formImage.reset();
-    },
-  },
   photoList
 );
 
@@ -49,54 +69,10 @@ api.allDataPromise().then(arg => {
   const [ dataCard, dataUser ] = arg;
   console.log(dataCard);
   console.log(dataUser);
-
-      const cardList = new Section(
-        {
-          items: dataCard,
-          renderer: ({ name, link, likes, owner, _id }) => {
-            const card = new Card(
-              {
-                name,
-                link,
-                likes,
-                owner,
-                _id,
-                handleCardClick: () => {
-                  newPopupWithImg.open({ name, link });
-                },
-                handleDeleteIconClick: () => {
-                  const popupConfirmDelete = new PopupWithSubmit(popupDelete, () => {
-                  api.deleteCard(_id)
-                   .then((res) => {
-                    card.handlerCardRemove()
-                  });
-                });
-                  popupConfirmDelete.setEventListeners();
-                  popupConfirmDelete.open();
-                },
-                handleLikeClick: () => {
-                  card.likeStatus()
-                  ? api.deleteLiki(_id)
-                      .then((res) => {
-                       card.handlerLike(res)
-                    })
-                  : api.putLike(_id)
-                      .then((res) => {
-                        card.handlerLike(res)
-                      })
-                },
-              },
-              "#template-photo", dataUser,
-            );
-            const cardElement = card.generateCard();
-            cardList.addItem(cardElement);
-            formImage.reset();
-          },
-        },
-        photoList
-      );
-      cardList.renderItem();
-
+  dataCard.reverse().forEach(({ name, link, likes, owner, _id }) => {
+    cardList.addItem(createCard({ name, link, likes, owner, _id }
+      ,templateElement, dataUser))
+  })
 
     profileTitle.textContent = dataUser.name;
     profileText.textContent = dataUser.about;
@@ -112,54 +88,20 @@ let dataUser;
 api.getInformationUser().then((res) => { dataUser = res })
 
 
-const profileImage = new PopupWithForm(popupGallery, {
+const popupAddCard = new PopupWithForm(popupGallery, {
   handlerSubmitForm: (formData) => {
-    profileImage.renderLoading(true)
+    renderLoading(popupGallery, true)
     api.addNewCard(formData)
       .then(({ name, link, likes, owner, _id}) => {
-        const newItemCard = new Card(
-          {
-            name,
-            link,
-            likes,
-            owner,
-            _id,
-            handleCardClick: () => {
-              // логика клика по картинки
-              newPopupWithImg.open({ name, link });
-            },
-            handleDeleteIconClick: () => {
-              const popupConfirmDelete = new PopupWithSubmit(popupDelete, () => {
-              api.deleteCard(_id)
-               .then((res) => {
-                newItemCard.handlerCardRemove()
-              });
-            });
-              popupConfirmDelete.setEventListeners();
-              popupConfirmDelete.open();
-            },
-            handleLikeClick: () => {
-              newItemCard.likeStatus()
-              ? api.deleteLiki(_id)
-                .then((res) => {
-                  newItemCard.handlerLike(res)
-                })
-              : api.putLike(_id)
-                  .then((res) => {
-                    newItemCard.handlerLike(res)
-                  })
-            },
-          },
-          "#template-photo", dataUser,
-        );
-        const newCardElement = newItemCard.generateCard();
-        cardList.addItem(newCardElement, true);
+        cardList.addItem(createCard({ name, link, likes, owner, _id,
+        }, templateElement, dataUser));
+        popupAddCard.close();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally((res) => {
-        profileImage.renderLoading(false)
+        renderLoading(popupGallery, false)
       })
   },
 });
@@ -167,37 +109,40 @@ const profileImage = new PopupWithForm(popupGallery, {
 const aboutUser = new UserInfo({
   userName: ".profile__title",
   userInfo: ".profile__text",
+  userAvatar: ".profile__avatar"
 });
 
 
 const profileEdit = new PopupWithForm(popupProfile, {
   handlerSubmitForm: (formData) => {
-    profileEdit.renderLoading(true)
+    renderLoading(popupProfile, true)
     api.saveInfoUser(formData)
       .then((res) => {
         aboutUser.setUserInfo(res);
+        profileEdit.close();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally((res) => {
-        profileEdit.renderLoading(false)
+        renderLoading(popupProfile, false)
       })
   },
 });
 
 const popupFormAvatar = new PopupWithForm(popupAvatar, {
   handlerSubmitForm: (formData) => {
-    popupFormAvatar.renderLoading(true)
+    renderLoading(popupAvatar, true)
     api.avatar(formData)
       .then((res) => {
-        avatar.src = res.avatar
+        aboutUser.setUserInfo(res);
+        popupFormAvatar.close();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally((res) => {
-        popupFormAvatar.renderLoading(false)
+        renderLoading(popupAvatar, false)
       })
   }
 })
@@ -218,7 +163,7 @@ function openProfileEdit() {
 function openImagePopup() {
   formValidationGallery.disabledButton();
   formValidationGallery.deleteError();
-  profileImage.open();
+  popupAddCard.open();
 }
 
 function openAvatarPopup() {
@@ -241,7 +186,7 @@ formAvatarButton.addEventListener("click", () => {
 
 popupFormAvatar.setEventListeners();
 profileEdit.setEventListeners();
-profileImage.setEventListeners();
+popupAddCard.setEventListeners();
 newPopupWithImg.setEventListeners();
 formValidationGallery.enableValidation();
 formValidationProfile.enableValidation();
