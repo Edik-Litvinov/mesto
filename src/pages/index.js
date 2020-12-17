@@ -116,13 +116,13 @@ const profileEdit = new PopupWithForm(popupProfile, {
     api.saveInfoUser(formData)
       .then((res) => {
         aboutUser.setUserInfo(res);
-        profileEdit.close();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally((res) => {
-        renderLoading(popupProfile, false)
+        renderLoading(popupProfile, false);
+        profileEdit.close();
       })
   },
 });
