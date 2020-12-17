@@ -68,4 +68,10 @@ export const settings = {
   errorClass: 'popup__form-item_state'
 }
 
+export const userSettings = {
+  userName: ".profile__title",
+  userInfo: ".profile__text",
+  userAvatar: ".profile__avatar"
+}
+
 export const templateElement = document.querySelector('#template-photo');

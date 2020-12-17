@@ -1,15 +1,14 @@
 export default class Section {
-  constructor( elementContainer) {
-    // this._initialItems  = items;
-    // this.renderer = renderer;
+  constructor({ renderer },elementContainer) {
+    this.renderer = renderer;
     this._elementContainer = elementContainer;
   }
 
-  // renderItem() {
-  //   this._initialItems.reverse().map(item => {
-  //     this.renderer(item);
-  //   });
-  // }
+  renderItem(data) {
+    data.reverse().map(item => {
+      this.renderer(item);
+    });
+  }
 
   addItem(element) {
     // isPrepend

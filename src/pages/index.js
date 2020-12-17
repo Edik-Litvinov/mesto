@@ -2,7 +2,7 @@ import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import {
   formElement, popupProfile, buttonOpenPopup, nameInput, jobInput, photoList, buttonAddImage, popupGallery, formImage, popupPhotoScale, settings,
-  profileTitle, profileText, avatar, popupDelete, popupAvatar, formAvatar, formAvatarButton, templateElement
+  profileTitle, profileText, avatar, popupDelete, popupAvatar, formAvatar, formAvatarButton, templateElement, userSettings
 
 } from "../utils/constants.js";
 import Section from "../components/Section.js";
@@ -15,22 +15,27 @@ import PopupWithSubmit from "../components/PopupWithSubmit.js";
 import renderLoading from "../utils/utils.js";
 
 
-function createCard({ name, link, likes, owner, _id }, templateElement, dataUser) {
+function createCard({ name, link, likes, owner, _id, currentUserData }, templateElement) {
+
   const card = new Card(
     {
-      name, link, likes, owner, _id,
+      name, link, likes, owner, _id, currentUserData,
 
       handleCardClick: () => { newPopupWithImg.open({ name, link }) },
       handleDeleteIconClick: () => {
         const popupConfirmDelete = new PopupWithSubmit(popupDelete, () => {
           renderLoading(popupDelete, true)
         api.deleteCard(_id)
-         .then((res) => {
-          card.handlerCardRemove();
-          popupConfirmDelete.close();
-        }).finally((res) => {
-          renderLoading(popupDelete, false);
-        })
+          .then((res) => {
+            card.handlerCardRemove();
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally((res) => {
+            renderLoading(popupDelete, false);
+            popupConfirmDelete.close();
+          })
       });
         popupConfirmDelete.setEventListeners();
         popupConfirmDelete.open();
@@ -39,22 +44,30 @@ function createCard({ name, link, likes, owner, _id }, templateElement, dataUser
         card.likeStatus()
         ? api.deleteLiki(_id)
             .then((res) => {
-             card.handlerLike(res)
-          })
+              card.handlerLike(res)
+            })
+            .catch((err) => {
+              console.log(err);
+            })
         : api.putLike(_id)
             .then((res) => {
               card.handlerLike(res)
             })
+            .catch((err) => {
+              console.log(err);
+            });
           }
-    }, templateElement, dataUser,
+    }, templateElement
   );
   const cardElement = card.generateCard();
-  return cardElement
+  cardList.addItem(cardElement)
 }
 
-const cardList = new Section(
-  photoList
-);
+const cardList = new Section({
+  renderer: ({ name, link, likes, owner, _id }) => {
+    createCard({ name, link, likes, owner, _id, currentUserData }, templateElement);
+  }
+}, photoList);
 
 const api = new Api({
   url: 'https://mesto.nomoreparties.co/v1/cohort-18',
@@ -64,19 +77,13 @@ const api = new Api({
   }
 })
 
-
+let currentUserData;
 api.allDataPromise().then(arg => {
   const [ dataCard, dataUser ] = arg;
-  console.log(dataCard);
-  console.log(dataUser);
-  dataCard.reverse().forEach(({ name, link, likes, owner, _id }) => {
-    cardList.addItem(createCard({ name, link, likes, owner, _id }
-      ,templateElement, dataUser))
-  })
+  currentUserData = dataUser;
 
-    profileTitle.textContent = dataUser.name;
-    profileText.textContent = dataUser.about;
-    avatar.src = dataUser.avatar;
+  cardList.renderItem(dataCard)
+  aboutUser.setUserInfo(dataUser)
 })
   .catch((err) => {
     console.log(err);
@@ -84,34 +91,24 @@ api.allDataPromise().then(arg => {
 
 const newPopupWithImg = new PopupWithImage(popupPhotoScale);
 
-let dataUser;
-api.getInformationUser().then((res) => { dataUser = res })
-
-
 const popupAddCard = new PopupWithForm(popupGallery, {
   handlerSubmitForm: (formData) => {
     renderLoading(popupGallery, true)
     api.addNewCard(formData)
-      .then(({ name, link, likes, owner, _id}) => {
-        cardList.addItem(createCard({ name, link, likes, owner, _id,
-        }, templateElement, dataUser));
-        popupAddCard.close();
+      .then(({ name, link, likes, owner, _id }) => {
+        createCard({ name, link, likes, owner, _id, currentUserData }, templateElement)
       })
       .catch((err) => {
         console.log(err);
       })
       .finally((res) => {
-        renderLoading(popupGallery, false)
+        renderLoading(popupGallery, false);
+        popupAddCard.close();
       })
   },
 });
 
-const aboutUser = new UserInfo({
-  userName: ".profile__title",
-  userInfo: ".profile__text",
-  userAvatar: ".profile__avatar"
-});
-
+const aboutUser = new UserInfo(userSettings);
 
 const profileEdit = new PopupWithForm(popupProfile, {
   handlerSubmitForm: (formData) => {
@@ -136,13 +133,13 @@ const popupFormAvatar = new PopupWithForm(popupAvatar, {
     api.avatar(formData)
       .then((res) => {
         aboutUser.setUserInfo(res);
-        popupFormAvatar.close();
       })
       .catch((err) => {
         console.log(err);
       })
       .finally((res) => {
-        renderLoading(popupAvatar, false)
+        renderLoading(popupAvatar, false);
+        popupFormAvatar.close();
       })
   }
 })

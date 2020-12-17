@@ -13,9 +13,11 @@ export default class UserInfo {
   }
 
   setUserInfo(res) {
-    if(res) {
+    if(res.name) {
       this._elementName.textContent = res.name;
+    } if (res.about) {
       this._elementInfo.textContent = res.about;
+    } if (res.avatar) {
       this._userAvatar.src = res.avatar;
     }
   }
